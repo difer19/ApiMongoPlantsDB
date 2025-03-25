@@ -5,6 +5,7 @@ const PlantSchema = new mongoose.Schema({
     genus: String,
     family: String,
     scientificNameFull: String,
+    state: Number,
     commonNames: [String],
     images: [
         {
