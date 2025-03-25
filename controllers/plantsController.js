@@ -26,16 +26,16 @@ const getPlantsByGenus = async (req, res) => {
         const skip = (page - 1) * limit;
         console.log(`🔍 Página: ${page}, Límite: ${limit}, Saltar: ${skip}`);
 
-        const plantsList = await Plant.find({genus : regex}).skip(skip).limit(limit);
+        const plants = await Plant.find({genus : regex}).skip(skip).limit(limit);
 
-        const total = await plantsList.length;
-        console.log(`✅ Total: ${total}, Devueltos: ${plantsList.length}`);
+        const total = await plants.length;
+        console.log(`✅ Total: ${total}, Devueltos: ${plants.length}`);
     
         return res.json({
             total,
             page,
             totalPages: Math.ceil(total / limit),
-            plantsList
+            plants
         });
     }catch(error){
         console.error('❌ Error al obtener las plantas:', error);
@@ -57,16 +57,16 @@ const getPlantsByFamily = async (req, res) => {
 
         const filter = { family: regex };
 
-        const plantsList = await Plant.find(filter).skip(skip).limit(limit);
+        const plants = await Plant.find(filter).skip(skip).limit(limit);
         const total = await Plant.countDocuments(filter);
 
-        console.log(`✅ Total encontrados: ${total}, Devueltos en esta página: ${plantsList.length}`);
+        console.log(`✅ Total encontrados: ${total}, Devueltos en esta página: ${plants.length}`);
 
         return res.json({
             total,
             page,
             totalPages: Math.ceil(total / limit),
-            plantsList
+            plants
         });
     } catch (error) {
         console.error('❌ Error al obtener las plantas por familia:', error);
@@ -86,21 +86,21 @@ const searchPlantsByNames = async (req, res) => {
         const skip = (page - 1) * limit;
         console.log(`🔍 Página: ${page}, Límite: ${limit}, Saltar: ${skip}`);
 
-        const plantsList = await Plant.find({
+        const plants = await Plant.find({
             $or: [
                 { scientificName: regex },
                 { commonNames: { $elemMatch: { $regex: regex } } }
             ]
         }).skip(skip).limit(limit);
 
-        const total = await plantsList.length;
-        console.log(`✅ Total: ${total}, Devueltos: ${plantsList.length}`);
+        const total = await plants.length;
+        console.log(`✅ Total: ${total}, Devueltos: ${plants.length}`);
     
         return res.json({
             total,
             page,
             totalPages: Math.ceil(total / limit),
-            plantsList
+            plants
         });
     }catch(error){
         console.error('❌ Error al obtener las plantas:', error);
